@@ -40,8 +40,6 @@ export async function createCloudTask(userId: string, action: string, scheduleTi
         body: Buffer.from(JSON.stringify(message)).toString('base64'),
       },
       scheduleTime: scheduleTimeSeconds
-        ? { seconds: Math.floor(Date.now() / 1000) + scheduleTimeSeconds }
-        : undefined,
     },
   };
 
@@ -50,4 +48,24 @@ export async function createCloudTask(userId: string, action: string, scheduleTi
   console.log(`✅ Task created: ${response.name} and ${response.scheduleTime} scheduled with taskId: ${taskId}`);
 
 
+
+
 }
+
+
+
+async function createMultipleTasks() {
+  for (let i = 0; i < 1000; i++) {
+    try {
+      await createCloudTask(`user-${i}`, `action-${i}`, 60);
+      console.log(`🚀 Created task ${i + 1} of 1000`);
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    } catch (error: any) {
+      console.error(`❌ Failed to create task ${i + 1}: ${error.message}`);
+    }
+  }
+}
+
+createMultipleTasks()
+  .then(() => console.log('✅ All tasks created'))
+  .catch((error) => console.error(`❌ Error creating tasks: ${error.message}`));
