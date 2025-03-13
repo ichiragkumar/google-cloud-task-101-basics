@@ -1,15 +1,18 @@
-
 import express, { Request, Response } from 'express';
+
 export async function executeTask(req: Request, res: Response): Promise<any> {
   try {
     console.log(`🌍 Incoming request: ${JSON.stringify(req.body)}`);
 
-    const { taskId, userId, action } = req.body;
+    // Extract values from payload
+    const { taskId, payload } = req.body;
 
-    if (!taskId || !userId || !action) {
+    if (!taskId || !payload || !payload.userId || !payload.action) {
       console.error(`❌ Invalid payload: ${JSON.stringify(req.body)}`);
       return res.status(400).json({ error: 'Invalid payload' });
     }
+
+    const { userId, action } = payload;
 
     console.log(`✅ Executing task for user: ${userId}, action: ${action}`);
 
