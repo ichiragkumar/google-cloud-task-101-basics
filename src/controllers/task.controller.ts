@@ -10,7 +10,7 @@ export async function createTask(req: Request, res: Response) {
     await createCloudTask(
       userId,
       action,
-      delayInSeconds ? Date.now() / 1000 + delayInSeconds : undefined
+      delayInSeconds,
     );
 
     res.status(200).json({ message: 'Task created successfully' });

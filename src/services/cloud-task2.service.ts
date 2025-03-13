@@ -47,5 +47,7 @@ export async function createCloudTask(userId: string, action: string, scheduleTi
 
   const [response] = await client.createTask(task);
 
-  console.log(`✅ Task created: ${response.name}`);
+  console.log(`✅ Task created: ${response.name} and ${response.scheduleTime} scheduled with taskId: ${taskId}`);
+
+
 }

@@ -4,7 +4,7 @@ export async function executeTask(req: Request, res: Response): Promise<any> {
   try {
     console.log(`🌍 Incoming request: ${JSON.stringify(req.body)}`);
 
-    // Extract values from payload
+
     const { taskId, payload } = req.body;
 
     if (!taskId || !payload || !payload.userId || !payload.action) {
@@ -16,7 +16,7 @@ export async function executeTask(req: Request, res: Response): Promise<any> {
 
     console.log(`✅ Executing task for user: ${userId}, action: ${action}`);
 
-    // Simulate task execution
+
     await new Promise((resolve) => setTimeout(resolve, 1000));
 
     res.status(200).json({ message: 'Task executed successfully' });
