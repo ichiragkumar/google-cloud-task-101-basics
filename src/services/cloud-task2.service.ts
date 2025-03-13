@@ -18,11 +18,13 @@ export async function createCloudTask(userId: string, action: string, scheduleTi
 
   const message = {
     taskId,
-    userId,
-    action,
+    payload: {
+      userId,
+      action,
+    },
   };
 
-  const [response] = await client.createTask({
+  const task = {
     parent,
     task: {
       name: `${parent}/tasks/${taskId}`,
@@ -41,7 +43,9 @@ export async function createCloudTask(userId: string, action: string, scheduleTi
         ? { seconds: Math.floor(Date.now() / 1000) + scheduleTimeSeconds }
         : undefined,
     },
-  });
+  };
+
+  const [response] = await client.createTask(task);
 
   console.log(`✅ Task created: ${response.name}`);
 }
