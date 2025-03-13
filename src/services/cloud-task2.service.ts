@@ -11,35 +11,36 @@ const serviceAccountEmail = process.env.SERVICE_ACCOUNT_EMAIL!;
 
 const queuePath = client.queuePath(project, location, queue);
 
-export async function createCloudTask(payload: any, scheduleTimeSeconds?: number) {
+export async function createCloudTask(userId: string, action: string, scheduleTimeSeconds?: number) {
   const taskId = `${uuid()}`;
   const url = `${handlerUrl}?taskId=${taskId}`;
   const parent = queuePath;
 
   const message = {
     taskId,
-    payload,
+    userId,
+    action,
   };
 
   const [response] = await client.createTask({
-    parent: queuePath,
+    parent,
     task: {
-        name: `${parent}/tasks/${Date.now()}`,
-        httpRequest: {
-          oidcToken: {
-                serviceAccountEmail,
-          },
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          httpMethod: 'POST',
-          url: url,
-          body: Buffer.from(JSON.stringify(message)).toString('base64'),
+      name: `${parent}/tasks/${taskId}`,
+      httpRequest: {
+        httpMethod: 'POST',
+        url,
+        headers: {
+          'Content-Type': 'application/json',
         },
-        scheduleTime: scheduleTimeSeconds
-        ? { seconds: scheduleTimeSeconds }
-        : undefined,
+        oidcToken: {
+          serviceAccountEmail,
+        },
+        body: Buffer.from(JSON.stringify(message)).toString('base64'),
       },
+      scheduleTime: scheduleTimeSeconds
+        ? { seconds: scheduleTimeSeconds + Date.now() / 1000 }
+        : undefined,
+    },
   });
 
   console.log(`✅ Task created: ${response.name}`);
