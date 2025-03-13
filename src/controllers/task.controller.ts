@@ -21,7 +21,8 @@ export async function createTask(req: Request, res: Response) {
     const { userId, action, delayInSeconds } = req.body;
 
     await createCloudTask(
-      { userId, action },
+      userId,
+      action,
       delayInSeconds ? Date.now() / 1000 + delayInSeconds : undefined
     );
 
