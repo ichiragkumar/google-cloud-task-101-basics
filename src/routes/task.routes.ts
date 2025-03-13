@@ -1,12 +1,12 @@
 import { Router } from 'express';
-import { createTask, handleTask } from '../controllers/task.controller';
+import { createTask } from '../controllers/task.controller';
 import { verifyAuth } from '../middlewares/auth.middleware';
 import { executeTask } from '../controllers/execute.controller';
 
 
 const router = Router();
 
-router.post('/create', handleTask);
+
 
 
 

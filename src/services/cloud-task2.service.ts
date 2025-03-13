@@ -13,7 +13,7 @@ const queuePath = client.queuePath(project, location, queue);
 
 export async function createCloudTask(userId: string, action: string, scheduleTimeSeconds?: number) {
   const taskId = `${uuid()}`;
-  const url = `${handlerUrl}?taskId=${taskId}`;
+  const url = `${handlerUrl}`;
   const parent = queuePath;
 
   const message = {
@@ -38,7 +38,7 @@ export async function createCloudTask(userId: string, action: string, scheduleTi
         body: Buffer.from(JSON.stringify(message)).toString('base64'),
       },
       scheduleTime: scheduleTimeSeconds
-        ? { seconds: scheduleTimeSeconds + Date.now() / 1000 }
+        ? { seconds: Math.floor(Date.now() / 1000) + scheduleTimeSeconds }
         : undefined,
     },
   });
