@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 
-export async function executeTask(req: Request, res: Response) {
+export async function executeTask(req: Request, res: Response):Promise<any> {
   try {
     const { taskId, userId, action } = req.body;
 
